@@ -1,0 +1,46 @@
+# Required: serial settings
+serial:
+  # Location of the adapter (see first step of this guide)
+  port: /dev/ttyACM0
+
+# MQTT Settings
+mqtt:
+  # MQTT base topic for Zigbee2MQTT MQTT messages
+  base_topic: zigbee2mqtt
+  # MQTT server URL
+  server: 'mqtt://mqtt'
+  # MQTT server authentication, uncomment if required:
+  # user: my_user
+  # password: my_password
+
+# Zigbee Network
+# Allow new devices to join
+permit_join: false
+
+advanced:
+  # Optional: ZigBee pan ID (default: shown below)
+  # Setting pan_id: GENERATE will make Zigbee2MQTT generate a new panID on next startup
+  pan_id: GENERATE
+  # Optional: Zigbee extended pan ID, GENERATE will make Zigbee2MQTT generate a new extended panID on next startup (default: shown below)
+  ext_pan_id: GENERATE
+  # Optional: ZigBee channel, changing requires re-pairing of all devices. (Note: use a ZLL channel: 11, 15, 20, or 25 to avoid Problems)
+  # (default: 11)
+  channel: 11
+  # Optional: network encryption key
+  # GENERATE will make Zigbee2MQTT generate a new network key on next startup
+  # Note: changing requires repairing of all devices (default: shown below)
+  network_key: GENERATE
+
+frontend:
+  # Optional, default 8080
+  port: 8080
+  # Optional, empty by default to listen on both IPv4 and IPv6. Opens a unix socket when given a path instead of an address (e.g. '/run/zigbee2mqtt/zigbee2mqtt.sock')
+  # host: 0.0.0.0
+  # Optional, enables authentication, disabled by default
+  # auth_token: your-secret-token
+  # Optional, url on which the frontend can be reached, currently only used for the Home Assistant device configuration page
+  # url: 'https://zigbee2mqtt.myhouse.org'
+  # Optional, certificate file path for exposing HTTPS. The sibling property 'ssl_key' must be set for HTTPS to be activated
+  # ssl_cert: /config/etc/letsencrypt/live/mydomain.com/fullchain.pem
+  # Optional, private key file path for exposing HTTPS. The sibling property 'ssl_cert' must be set for HTTPS to be activated
+  # ssl_key: /config/etc/letsencrypt/live/mydomain.com/privkey.pem

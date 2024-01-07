@@ -1,0 +1,9 @@
+{
+  "Version": "20160508",
+  "variables": {
+    "domoticzHost": "192.168.0.1",
+    "domoticzPassCode": "password"
+  },
+  "status": "OK",
+  "title": "Variables"
+}
