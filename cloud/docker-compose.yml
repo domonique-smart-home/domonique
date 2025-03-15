@@ -9,7 +9,7 @@ services:
     devices:
       - /dev/net/tun:/dev/net/tun
     volumes:
-      - ./config:/config
+      - ./:/config
     network_mode: host
     logging:
         driver: "json-file"
