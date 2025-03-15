@@ -1,6 +1,5 @@
-version: '1.0'
 volumes:
-  cloud_data:
+  data:
 
 services:
 # OpenVPN CLient
@@ -13,7 +12,7 @@ services:
     devices:
       - /dev/net/tun:/dev/net/tun
     volumes:
-      - cloud_data:/config
+      - data:/config
     network_mode: host
     logging:
         driver: "json-file"
