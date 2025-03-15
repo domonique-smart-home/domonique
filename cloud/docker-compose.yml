@@ -34,7 +34,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
       - /:/host
-    volumes:
       - type: volume
         source: data
         target: /data
