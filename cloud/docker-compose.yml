@@ -1,0 +1,22 @@
+version: '1.0'
+volumes:
+  openvpn_data:
+
+services:
+# OpenVPN CLient
+  openvpn:
+    container_name: openvpn-client
+    image: domoniquesmarthome/openvpn-client
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - openvpn_data:/config
+    network_mode: host
+    logging:
+        driver: "json-file"
+        options:
+            max-file: 2
+            max-size: 10m
