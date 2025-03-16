@@ -1,4 +1,5 @@
-version: '2.0'
+# version: '2.0'
+
 services:
 # MQTT Server
   mqtt:
@@ -15,7 +16,6 @@ services:
       - default
     ports:
       - 1883:1883
-      - 9001:9001
     logging:
         driver: "json-file"
         options:
