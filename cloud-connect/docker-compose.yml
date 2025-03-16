@@ -16,3 +16,20 @@ services:
         options:
             max-file: 2
             max-size: 10m
+
+# Portainer Agent
+  portainer_agent:
+    container_name: portainer-agent
+    image: portainer/agent:2.19.4
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+      - /:/host
+      - ./agent:/data
+    network_mode: host
+    env_file:
+     - ./config.env
+    environment:
+      - EDGE=1
+      - EDGE_INSECURE_POLL=1
