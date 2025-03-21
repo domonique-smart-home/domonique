@@ -1,0 +1,19 @@
+# Version: 1.0
+# Docker image architecture should be set by ${ARCH} variable. By default "latest" and images versions is only for OSPI on Raspberry PI with arm64 architecture.
+services:
+  ospi:
+    image: domoniquesmarthome/opensprinkler:${ARCH}
+    container_name: opensprinkler
+    restart: none
+    privileged: true
+    volumes:
+      - /dev/mem:/dev/mem
+      - ${ROOT_FOLDER}/opensprinkler/data:/data
+    network_mode: bridge
+    logging:
+        driver: "json-file"
+        options:
+            max-file: 2
+            max-size: 10m
+    ports:
+      - 8080:8080
