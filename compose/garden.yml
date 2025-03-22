@@ -56,7 +56,7 @@ services:
 # Domoticz Server
   domoticz:
     container_name: domoticz
-    image: domoticz/domoticz:2023.2
+    image: domoticz/domoticz:2024.7
     restart: unless-stopped
     depends_on:
       - zigbee2mqtt
