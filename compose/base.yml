@@ -54,7 +54,7 @@ services:
             max-file: 2
             max-size: 10m
 
-    # Domoticz Server
+# Domoticz Server
   domoticz:
     container_name: domoticz
     image: domoticz/domoticz:2024.7
