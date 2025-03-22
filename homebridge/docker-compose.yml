@@ -1,0 +1,15 @@
+services:
+  homebridge:
+    container_name: homebridge
+    image: homebridge/homebridge
+    restart: unless-stopped
+    environment:
+      - HOMEBRIDGE_CONFIG_UI_PORT=8581
+    volumes:
+      - ./:/homebridge
+    network_mode: host
+    logging:
+      driver: "json-file"
+      options:
+        max-file: 2
+        max-size: 10m
