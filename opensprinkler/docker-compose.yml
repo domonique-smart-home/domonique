@@ -10,10 +10,10 @@ services:
       - /dev/mem:/dev/mem
       - ${ROOT_FOLDER}/opensprinkler/data:/data
     network_mode: bridge
+    ports:
+      - 8080:8080
     logging:
         driver: "json-file"
         options:
             max-file: 2
             max-size: 10m
-    ports:
-      - 8080:8080
