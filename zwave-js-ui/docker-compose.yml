@@ -1,0 +1,24 @@
+services:
+  zwave-js-ui:
+    container_name: zwave-js-ui
+    image: zwavejs/zwave-js-ui
+    restart: unless-stopped
+    tty: true
+    stop_signal: SIGINT
+    environment:
+      - SESSION_SECRET=MRPpMApwBNUbvQ6m09OJW7ts6deT6zLP
+      - ZWAVEJS_EXTERNAL_CONFIG=/usr/src/app/store/.config-db
+      - TZ=Europe/Madrid
+    devices:
+      - /dev/null:/dev/zwave
+    volumes:
+      - ./:/usr/src/app/store
+    network_mode: bridge
+    ports:
+      - '8091:8091'
+      - '3000:3000'
+    logging:
+        driver: "json-file"
+        options:
+            max-file: 2
+            max-size: 10m
