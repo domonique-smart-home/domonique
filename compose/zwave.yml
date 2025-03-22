@@ -85,7 +85,7 @@ services:
 # Domoticz Server
   domoticz:
     container_name: domoticz
-    image: domoticz/domoticz:2024.7
+    image: domoticz/domoticz:2023.2
     restart: unless-stopped
     environment:
       - PUID=1000
