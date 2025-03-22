@@ -127,7 +127,7 @@ services:
 
 # Opensprinkler Server
   ospi:
-    image: domoniquesmarthome/opensprinkler:${ARCH}
+    image: domoniquesmarthome/opensprinkler
     container_name: opensprinkler
     restart: none
     privileged: true
