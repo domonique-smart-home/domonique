@@ -1,0 +1,19 @@
+services:
+  mqtt:
+    container_name: mosquitto
+    image: eclipse-mosquitto
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Madrid  
+    volumes:
+      - ./config:/mosquitto/config
+      - ./data:/mosquitto/data
+      - .log:/mosquitto/log
+    network_mode: bridge
+    ports:
+      - 1883:1883
+    logging:
+        driver: "json-file"
+        options:
+            max-file: 2
+            max-size: 10m
