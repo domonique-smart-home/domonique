@@ -1,5 +1,13 @@
 # version: '2.0'
 
+networks:
+  default:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.100.0.0/16
+         gateway: 172.100.0.1
+         
 services:
 # MQTT Server
   mqtt:
@@ -49,7 +57,7 @@ services:
 # Z-Wave JS UI Server
   zwave-js-ui:
     container_name: zwave-js-ui
-    image: zwavejs/zwave-js-ui:latest
+    image: zwavejs/zwave-js-ui
     restart: unless-stopped
     depends_on:
       - mqtt
@@ -77,7 +85,7 @@ services:
 # Domoticz Server
   domoticz:
     container_name: domoticz
-    image: domoticz/domoticz:2023.2
+    image: domoticz/domoticz
     restart: unless-stopped
     environment:
       - PUID=1000
@@ -91,6 +99,8 @@ services:
       - ${ROOT_FOLDER}/domoticz:/opt/domoticz/userdata
       - /sys:/sys
     network_mode: host
+    extra_hosts:
+      - mqtt:127.0.0.1
     ports:
       - 80:80
       - 443:443
@@ -100,7 +110,7 @@ services:
 # Homebride Server
   homebridge:
     container_name: homebridge
-    image: homebridge/homebridge:latest
+    image: homebridge/homebridge
     restart: unless-stopped
     environment:
       - HOMEBRIDGE_CONFIG_UI_PORT=8581
@@ -115,10 +125,22 @@ services:
         max-file: 2
         max-size: 10m
 
-networks:
-  default:
-    driver: bridge
-    ipam:
-     config:
-       - subnet: 172.100.0.0/16
-         gateway: 172.100.0.1
+# Opensprinkler Server
+  ospi:
+    image: domoniquesmarthome/opensprinkler:${ARCH}
+    container_name: opensprinkler
+    restart: none
+    privileged: true
+    volumes:
+      - /dev/mem:/dev/mem
+      - ${ROOT_FOLDER}/opensprinkler/data:/data
+    network_mode: bridge
+    extra_hosts:
+      - mqtt:127.0.0.1
+    ports:
+      - 8083:8080
+    logging:
+        driver: "json-file"
+        options:
+            max-file: 2
+            max-size: 10m
