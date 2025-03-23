@@ -1,7 +1,7 @@
 services:
 # OpenVPN CLient
   openvpn:
-    container_name: openvpn-client
+    container_name: openvpn-connect
     image: domoniquesmarthome/openvpn-client
     restart: unless-stopped
     cap_add:
