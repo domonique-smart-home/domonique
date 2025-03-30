@@ -1,0 +1,20 @@
+services:
+  ups:
+    container_name: nut-upsd
+    image: botsudo/nut-upsd:latest
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Madrid
+      - UPS_DRIVER=blazer_usb
+      - UPS_PORT=auto
+    privileged: true
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+    network_mode: bridge
+    ports:
+      - 3493:3493
+    logging:
+        driver: "json-file"
+        options:
+            max-file: 2
+            max-size: 10
