@@ -101,10 +101,11 @@ services:
     image: domoniquesmarthome/opensprinkler
     container_name: opensprinkler
     restart: none
+    environment:
+      - TZ=${TZ}
     privileged: true
     volumes:
       - /dev/mem:/dev/mem
-      - TZ=${TZ}
       - ${ROOT_FOLDER}/opensprinkler/data:/data
     networks:
       - default
