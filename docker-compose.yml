@@ -12,10 +12,10 @@ services:
 # MQTT Server
   mqtt:
     container_name: mosquitto
-    image: eclipse-mosquitto
+    image: eclipse-mosquitto:2.0.21
     restart: unless-stopped
     environment:
-      - TZ=${TZ}
+      - TZ=${TZ}    
     volumes:
       - ${ROOT_FOLDER}/mosquitto/config:/mosquitto/config
       - ${ROOT_FOLDER}/mosquitto/data:/mosquitto/data
@@ -30,37 +30,15 @@ services:
             max-file: 2
             max-size: 10m
 
-# NUT Network UPS Tool Daemon
-  ups:
-    container_name: nut-upsd
-    image: botsudo/nut-upsd:latest
-    restart: unless-stopped
-    environment:
-      - TZ=${TZ}
-      - UPS_DRIVER=${UPS_DRIVER}
-      - UPS_PORT=${UPS_PORT}
-    privileged: true
-    devices:
-      - /dev/bus/usb:/dev/bus/usb
-    networks:
-      - default
-    ports:
-      - 3493:3493
-    logging:
-        driver: "json-file"
-        options:
-            max-file: 2
-            max-size: 10
-
 # Zigbee2MQTT Server
   zigbee2mqtt:
     container_name: zigbee2mqtt
-    image: koenkk/zigbee2mqtt
+    image: koenkk/zigbee2mqtt:2.1.3
     restart: unless-stopped
     depends_on:
       - mqtt
     environment:
-      - TZ=${TZ}
+      - TZ=${TZ}    
     devices:
       - ${ZIGBEE_DEVICE}:/dev/ttyACM0
     volumes:
@@ -76,43 +54,15 @@ services:
             max-file: 2
             max-size: 10m
 
-# Z-Wave JS UI Server
-  zwave-js-ui:
-    container_name: zwave-js-ui
-    image: zwavejs/zwave-js-ui
-    restart: unless-stopped
-    depends_on:
-      - mqtt
-    tty: true
-    stop_signal: SIGINT
-    environment:
-      - TZ=${TZ}
-      - SESSION_SECRET=${ZWAVE_SESSION_SECRET}
-      - ZWAVEJS_EXTERNAL_CONFIG=/usr/src/app/store/.config-db
-    devices:
-      - ${ZWAVE_DEVICE}:/dev/zwave
-    volumes:
-      - ${ROOT_FOLDER}/zwave-js-ui:/usr/src/app/store
-    networks:
-      - default
-    ports:
-      - '8082:8091'
-      - '3000:3000'
-    logging:
-        driver: "json-file"
-        options:
-            max-file: 2
-            max-size: 10m
-
 # Domoticz Server
   domoticz:
     container_name: domoticz
-    image: domoticz/domoticz
+    image: domoticz/domoticz:2024.7
     restart: unless-stopped
     environment:
-      - TZ=${TZ}
       - PUID=1000
       - PGID=1000
+      - TZ=${TZ}
       - WWW_PORT=80
     devices:
       - ${DOMOTICZ_ACM0_DEVICE}:/dev/ttyACM0
@@ -132,10 +82,9 @@ services:
 # Homebride Server
   homebridge:
     container_name: homebridge
-    image: homebridge/homebridge
+    image: homebridge/homebridge:latest
     restart: unless-stopped
     environment:
-      - TZ=${TZ}
       - HOMEBRIDGE_CONFIG_UI_PORT=8581
     depends_on:
       - domoticz
@@ -147,25 +96,3 @@ services:
       options:
         max-file: 2
         max-size: 10m
-
-# Opensprinkler Server
-  ospi:
-    image: domoniquesmarthome/opensprinkler
-    container_name: opensprinkler
-    restart: none
-    environment:
-      - TZ=${TZ}
-    privileged: true
-    volumes:
-      - /dev/mem:/dev/mem
-      - ${ROOT_FOLDER}/opensprinkler/data:/data
-    network_mode: bridge
-    extra_hosts:
-      - mqtt:127.0.0.1
-    ports:
-      - 8083:8080
-    logging:
-        driver: "json-file"
-        options:
-            max-file: 2
-            max-size: 10m
