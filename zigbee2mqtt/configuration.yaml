@@ -1,4 +1,4 @@
-# Required: serial settings.
+# Required: serial settings
 serial:
   # Location of the adapter (see first step of this guide)
   # USB adapters - use format "port: /dev/serial/by-id/XXX"
