@@ -12,7 +12,7 @@ services:
 # MQTT Server
   mqtt:
     container_name: mosquitto
-    image: eclipse-mosquitto
+    image: eclipse-mosquitto:2.0.22
     restart: unless-stopped
     environment:
       - TZ=${TZ}
@@ -34,7 +34,7 @@ services:
   ups:
     container_name: nut-upsd
     image: botsudo/nut-upsd:latest
-    restart: unless-stopped
+    restart: no
     environment:
       - TZ=${TZ}
       - UPS_DRIVER=${UPS_DRIVER}
@@ -55,7 +55,7 @@ services:
 # Zigbee2MQTT Server
   zigbee2mqtt:
     container_name: zigbee2mqtt
-    image: koenkk/zigbee2mqtt
+    image: koenkk/zigbee2mqtt:2.6.2
     restart: unless-stopped
     depends_on:
       - mqtt
@@ -79,7 +79,7 @@ services:
 # Z-Wave JS UI Server
   zwave-js-ui:
     container_name: zwave-js-ui
-    image: zwavejs/zwave-js-ui
+    image: zwavejs/zwave-js-ui:11.5.2
     restart: unless-stopped
     depends_on:
       - mqtt
@@ -107,7 +107,7 @@ services:
 # Domoticz Server
   domoticz:
     container_name: domoticz
-    image: domoticz/domoticz
+    image: domoticz/domoticz:2025.1
     restart: unless-stopped
     environment:
       - TZ=${TZ}
@@ -132,7 +132,7 @@ services:
 # Homebride Server
   homebridge:
     container_name: homebridge
-    image: homebridge/homebridge
+    image: homebridge/homebridge:2025-09-28
     restart: unless-stopped
     environment:
       - TZ=${TZ}
@@ -142,30 +142,10 @@ services:
     volumes:
       - ${ROOT_FOLDER}/homebridge:/homebridge
     network_mode: host
+    extra_hosts:
+      - domoticz:127.0.0.1
     logging:
       driver: "json-file"
       options:
         max-file: 2
         max-size: 10m
-
-# Opensprinkler Server
-  ospi:
-    image: domoniquesmarthome/opensprinkler
-    container_name: opensprinkler
-    restart: none
-    environment:
-      - TZ=${TZ}
-    privileged: true
-    volumes:
-      - /dev/mem:/dev/mem
-      - ${ROOT_FOLDER}/opensprinkler/data:/data
-    network_mode: bridge
-    extra_hosts:
-      - mqtt:127.0.0.1
-    ports:
-      - 8083:8080
-    logging:
-        driver: "json-file"
-        options:
-            max-file: 2
-            max-size: 10m
