@@ -1,4 +1,5 @@
-# version: '3.0'
+# version: '3.0' (19/10/2025)
+# Services version: MQTT Server(2.0.22), Zigbee2MQTT Server(2.6.2), Domoticz Server(2025.1), Homebride Server(2025-09-28)
 
 networks:
   default:
@@ -12,7 +13,7 @@ services:
 # MQTT Server
   mqtt:
     container_name: mosquitto
-    image: eclipse-mosquitto:2.0.21
+    image: eclipse-mosquitto:2.0.22
     restart: unless-stopped
     environment:
       - TZ=${TZ}    
@@ -29,6 +30,28 @@ services:
         options:
             max-file: 2
             max-size: 10m
+
+# NUT Network UPS Tool Daemon
+  ups:
+    container_name: nut-upsd
+    image: botsudo/nut-upsd:latest
+    restart: no
+    environment:
+      - TZ=${TZ}
+      - UPS_DRIVER=${UPS_DRIVER}
+      - UPS_PORT=${UPS_PORT}
+    privileged: true
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+    networks:
+      - default
+    ports:
+      - 3493:3493
+    logging:
+        driver: "json-file"
+        options:
+            max-file: 2
+            max-size: 10
 
 # Zigbee2MQTT Server
   zigbee2mqtt:
