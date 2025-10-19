@@ -1,4 +1,5 @@
-# version: '2.0'
+# version: '3.0' (19/10/2025)
+# Services version: MQTT Server(2.0.22), Zigbee2MQTT Server(2.6.2), Z-Wave JS UI Server(11.5.2), Domoticz Server(2025.1), Homebride Server(2025-09-28)
 
 networks:
   default:
