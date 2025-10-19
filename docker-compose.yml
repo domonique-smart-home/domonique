@@ -1,4 +1,4 @@
-# version: '2.0'
+# version: '3.0'
 
 networks:
   default:
@@ -33,7 +33,7 @@ services:
 # Zigbee2MQTT Server
   zigbee2mqtt:
     container_name: zigbee2mqtt
-    image: koenkk/zigbee2mqtt:2.1.3
+    image: koenkk/zigbee2mqtt:2.6.2
     restart: unless-stopped
     depends_on:
       - mqtt
@@ -57,7 +57,7 @@ services:
 # Domoticz Server
   domoticz:
     container_name: domoticz
-    image: domoticz/domoticz:2024.7
+    image: domoticz/domoticz:2025.1
     restart: unless-stopped
     environment:
       - PUID=1000
@@ -82,7 +82,7 @@ services:
 # Homebride Server
   homebridge:
     container_name: homebridge
-    image: homebridge/homebridge:latest
+    image: homebridge/homebridge:2025-09-28
     restart: unless-stopped
     environment:
       - HOMEBRIDGE_CONFIG_UI_PORT=8581
