@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Domonique Advanced Setup</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-2: #111827;
+      --fg: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #60a5fa;
+      --btn-bg: #1f2937;
+      --btn-bg-h: #374151;
+      --border: #1f2937;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, var(--bg) 0%, #0b1226 100%);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header { position: sticky; top: 0; z-index: 10; background: rgba(15,23,42,0.8); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 12px 16px; }
+    .bar { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+    .btn {
+      appearance: none; border: 1px solid var(--border); color: var(--fg);
+      background: var(--btn-bg); padding: 10px 14px; border-radius: 12px;
+      cursor: pointer; font-weight: 600; letter-spacing: .02em;
+      transition: transform .06s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover { background: var(--btn-bg-h); border-color: #4b5563; }
+    .btn:active { transform: translateY(1px); }
+    .btn.active { outline: 2px solid var(--accent); color: black; }
+    main { flex: 1; display: grid; }
+    .frame-wrap { width: 100%; height: calc(100vh - 112px); }
+    iframe { width: 100%; height: 100%; border: 0; background: var(--bg-2); border-top: 1px solid var(--border); }
+    .status { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="bar" id="buttons"></div>
+    </div>
+  </header>
+  <main>
+    <div class="frame-wrap">
+      <iframe id="subframe" title="Domonique Advanced Setup Components" sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-downloads"></iframe>
+    </div>
+  </main>
+
+  <script>
+    // ===================== CUSTOM CONFIGURATION =====================
+    // Define only host, port and path. Protocol will be the same as Domoticz.
+    const CONFIG = [
+      { label: "Zigbee2MQTT", host: null, port: 8081, path: '/', default: true },
+      { label: "Homebridge", host: null, port: 8581, path: '/' },
+      //{ label: "Zoneminder", host: '127.0.0.1', port: 8090, path: '/' },
+    ];
+    // ==================================================================
+
+    const frame = document.getElementById('subframe');
+    const statusEl = document.getElementById('status');
+    const btnBar = document.getElementById('buttons');
+
+    function buildUrl({ host, port, path }) {
+      const baseProtocol = window.location.protocol.replace(':', '');
+      const baseHost = host || window.location.hostname;
+      const p = String(port || '').trim();
+      const cleanPath = (path || '/').startsWith('/') ? path : `/${path}`;
+      return `${baseProtocol}://${baseHost}${p ? ':' + p : ''}${cleanPath}`;
+    }
+
+    function setActiveButton(button) {
+      const all = btnBar.querySelectorAll('button');
+      all.forEach(b => b.classList.remove('active'));
+      if (button) button.classList.add('active');
+    }
+
+    function loadView(view, button) {
+      if (!view) return;
+      const url = buildUrl(view);
+      frame.src = url;
+      setActiveButton(button);
+      statusEl.textContent = `Cargando: ${url}`;
+    }
+
+    function initButtons() {
+      btnBar.innerHTML = '';
+      CONFIG.forEach((view, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn';
+        btn.textContent = view.label || `Vista ${idx + 1}`;
+        btn.addEventListener('click', () => loadView(view, btn));
+        btnBar.appendChild(btn);
+
+        if (view.default && !btnBar.querySelector('.btn.active')) {
+          setActiveButton(btn);
+          setTimeout(() => loadView(view, btn), 0);
+        }
+      });
+    }
+
+    frame.addEventListener('load', () => {
+      try {
+        statusEl.textContent = `Showing: ${frame.src}`;
+      } catch (e) {
+        statusEl.textContent = 'Contents loaded (CORS/XFO blocked).';
+      }
+    });
+
+    initButtons();
+  </script>
+</body>
+</html>
