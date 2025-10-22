@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title></title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-2: #111827;
+      --fg: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #60a5fa;
+      --btn-bg: #1f2937;
+      --btn-bg-h: #374151;
+      --border: #1f2937;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, var(--bg) 0%, #0b1226 100%);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial;
+      display: flex; flex-direction: column; min-height: 100vh;
+    }
+    header { position: sticky; top: 0; z-index: 10; background: rgba(15,23,42,0.8); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 12px 16px; }
+    .title { font-size: 16px; font-weight: 600; color: var(--muted); letter-spacing: .02em; }
+    .bar { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+    .btn {
+      appearance: none; border: 1px solid var(--border); color: var(--fg);
+      background: var(--btn-bg); padding: 10px 14px; border-radius: 12px;
+      cursor: default; font-weight: 600; letter-spacing: .02em;
+      transition: background .2s ease, border-color .2s ease;
+    }
+    .btn:hover { background: var(--btn-bg-h); border-color: #4b5563; }
+    main { flex: 1; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+    .status { font-size: 14px; color: var(--muted); margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="title">Domonique Cloud ID</div>
+      <div class="bar">
+        <button class="btn">NO SERIAL FOUND</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="status">Domonique Smart Home @2024</div>
+  </main>
+</body>
+</html>
