@@ -119,3 +119,17 @@ services:
       options:
         max-file: 2
         max-size: 10m
+
+# Alexa Cookie Proxy
+  alexa-cookie:
+    container_name: alexa-cookie
+    image: domoniquesmarthome/alexa-cookie-cli:latest
+    restart: unless-stopped
+    environment:
+      - ALEXA_PROXY_HOST=${ALEXA_PROXY_HOST}
+      - ALEXA_PROXY_PORT=${ALEXA_PROXY_PORT} 
+    volumes:
+      # Path to alexa_remote_control.sh file that will be updated with REFRESH_TOKEN
+      - ${ROOT_FOLDER}/domoticz/scripts/bash/alexa_remote_control.sh:/data/alexa_remote_control.sh
+    ports:
+      - 8888:8888
