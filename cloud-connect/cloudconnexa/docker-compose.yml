@@ -1,0 +1,18 @@
+services:
+# OpenVPN CloudConnexa
+  openvpn:
+    container_name: cloudconnexa
+    image: domoniquesmarthome/openvpn-client
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - ./:/config
+    network_mode: host
+    logging:
+        driver: "json-file"
+        options:
+            max-file: 2
+            max-size: 10m
