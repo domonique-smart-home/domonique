@@ -12,7 +12,6 @@ services:
     volumes:
       - ./config:/config
       - /lib/modules:/lib/modules
-
     cap_add:
       - SYS_MODULE
     privileged: true
@@ -22,13 +21,13 @@ services:
     container_name: openvpn-connect
     image: domoniquesmarthome/openvpn-client
     restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
+    network_mode: host
     devices:
       - /dev/net/tun:/dev/net/tun
     volumes:
       - ./:/config
-    network_mode: host
+    cap_add:
+      - NET_ADMIN
     logging:
         driver: "json-file"
         options:
@@ -40,14 +39,14 @@ services:
     container_name: portainer-agent
     image: portainer/agent:2.19.4
     restart: always
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /var/lib/docker/volumes:/var/lib/docker/volumes
-      - /:/host
-      - ./agent:/data
-    network_mode: bridge
+    network_mode: host
     env_file:
      - ./config.env
     environment:
       - EDGE=1
       - EDGE_INSECURE_POLL=1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+      - /:/host
+      - ./agent:/data
