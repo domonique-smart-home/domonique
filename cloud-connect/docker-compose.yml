@@ -1,4 +1,22 @@
 services:
+# Wireguard Client
+  wg-client:
+    image: linuxserver/wireguard:1.0.20250521-r1-ls97
+    container_name: wireguard-connect
+    restart: always
+    network_mode: "host"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+    volumes:
+      - ./config:/config
+      - /lib/modules:/lib/modules
+
+    cap_add:
+      - SYS_MODULE
+    privileged: true
+    
 # OpenVPN CLient
   openvpn:
     container_name: openvpn-connect
