@@ -1,35 +1,53 @@
 services:
-# OpenVPN CLient
-  openvpn:
-    container_name: openvpn-connect
-    image: domoniquesmarthome/openvpn-client
-    restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
-    volumes:
-      - ./:/config
+
+# Wireguard Client
+  wg-client:
+    image: linuxserver/wireguard:1.0.20250521-r1-ls97
+    container_name: wireguard-connect
+    restart: always
     network_mode: host
-    logging:
-        driver: "json-file"
-        options:
-            max-file: 2
-            max-size: 10m
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+    volumes:
+      - ./config:/config
+      - /lib/modules:/lib/modules
+    cap_add:
+      - SYS_MODULE
+    privileged: true
 
 # Portainer Agent
   portainer_agent:
     container_name: portainer-agent
-    image: portainer/agent:2.19.4
+    image: portainer/agent:2.33.6
     restart: always
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /var/lib/docker/volumes:/var/lib/docker/volumes
-      - /:/host
-      - ./agent:/data
-    network_mode: bridge
+    network_mode: host
     env_file:
      - ./config.env
     environment:
       - EDGE=1
       - EDGE_INSECURE_POLL=1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+      - /:/host
+      - ./agent:/data
+
+# # OpenVPN CLient
+#   openvpn:
+#     container_name: openvpn-client
+#     image: domoniquesmarthome/openvpn-client
+#     restart: unless-stopped
+#     cap_add:
+#       - NET_ADMIN
+#     devices:
+#       - /dev/net/tun:/dev/net/tun
+#     volumes:
+#       - ./config:/config
+#     network_mode: host
+#     logging:
+#         driver: "json-file"
+#         options:
+#             max-file: 2
+#             max-size: 10m
