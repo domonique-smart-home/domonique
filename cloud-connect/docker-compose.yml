@@ -1,5 +1,4 @@
 services:
-
 # Wireguard Client
   wg-client:
     image: linuxserver/wireguard:1.0.20250521-r1-ls97
