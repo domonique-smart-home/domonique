@@ -15,24 +15,6 @@ services:
     cap_add:
       - SYS_MODULE
     privileged: true
-    
-# OpenVPN CLient
-  openvpn:
-    container_name: openvpn-connect
-    image: domoniquesmarthome/openvpn-client
-    restart: unless-stopped
-    network_mode: host
-    devices:
-      - /dev/net/tun:/dev/net/tun
-    volumes:
-      - ./:/config
-    cap_add:
-      - NET_ADMIN
-    logging:
-        driver: "json-file"
-        options:
-            max-file: 2
-            max-size: 10m
 
 # Portainer Agent
   portainer_agent:
@@ -50,3 +32,21 @@ services:
       - /var/lib/docker/volumes:/var/lib/docker/volumes
       - /:/host
       - ./agent:/data
+
+# OpenVPN CLient
+  openvpn:
+    container_name: openvpn-connect
+    image: domoniquesmarthome/openvpn-client
+    restart: unless-stopped
+    network_mode: host
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - ./:/config
+    cap_add:
+      - NET_ADMIN
+    logging:
+        driver: "json-file"
+        options:
+            max-file: 2
+            max-size: 10m
