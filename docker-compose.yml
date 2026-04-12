@@ -109,6 +109,7 @@ services:
     container_name: domoticz
     image: domoticz/domoticz
     restart: unless-stopped
+    privileged: true
     environment:
       - TZ=${TZ}
       - PUID=1000
@@ -120,6 +121,8 @@ services:
     volumes:
       - ${ROOT_FOLDER}/domoticz:/opt/domoticz/userdata
       - /sys:/sys
+      - /dev/gpiochip0:/dev/gpiochip0
+      - /dev/gpiomem:/dev/gpiomem
     network_mode: host
     extra_hosts:
       - mqtt:127.0.0.1
