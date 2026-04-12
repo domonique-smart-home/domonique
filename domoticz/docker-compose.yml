@@ -3,6 +3,7 @@ services:
     container_name: domoticz
     image: domoticz/domoticz
     restart: unless-stopped
+    privileged: true
     environment:
       - PUID=1000
       - PGID=1000
@@ -14,6 +15,8 @@ services:
     volumes:
       - ./:/opt/domoticz/userdata
       - /sys:/sys
+      - /dev/gpiochip0:/dev/gpiochip0
+      - /dev/gpiomem:/dev/gpiomem
     network_mode: host
     ports:
       - 80:80
