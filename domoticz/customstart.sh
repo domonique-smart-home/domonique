@@ -12,8 +12,10 @@ apt-get update
 
 # Required apt packages for implemetations:
 #       - alexa-remote-control: jq oathtool
+#	- GPIO Control Plugin: python3-libgpiod
 #
 apt-get install -y jq oathtool
+apt-get install -y python3-libgpiod
 
 # Adding custom menu from ./config/templates
 #
