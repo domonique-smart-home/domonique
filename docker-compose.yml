@@ -108,7 +108,7 @@ services:
 # Domoticz Server
   domoticz:
     container_name: domoticz
-    image: domoticz/domoticz:2025.1
+    image: domoticz/domoticz:2026.4
     restart: unless-stopped
     environment:
       - TZ=${TZ}
