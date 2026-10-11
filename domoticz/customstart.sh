@@ -12,8 +12,10 @@ apt-get update
 
 # Required apt packages for implemetations:
 #       - alexa-remote-control: jq oathtool
+#       - telnetlib3 for python3
 #
 apt-get install -y jq oathtool
+python3 -m pip install --no-input telnetlib3
 
 # Adding custom menu from ./config/templates
 #
