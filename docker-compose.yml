@@ -12,7 +12,7 @@ services:
 # MQTT Server
   mqtt:
     container_name: mosquitto
-    image: eclipse-mosquitto
+    image: eclipse-mosquitto:2.0.22
     restart: unless-stopped
     environment:
       - TZ=${TZ}
@@ -55,7 +55,7 @@ services:
 # Zigbee2MQTT Server
   zigbee2mqtt:
     container_name: zigbee2mqtt
-    image: koenkk/zigbee2mqtt
+    image: koenkk/zigbee2mqtt:2.6.2
     restart: unless-stopped
     depends_on:
       - mqtt
@@ -79,7 +79,7 @@ services:
 # Z-Wave JS UI Server
   zwave-js-ui:
     container_name: zwave-js-ui
-    image: zwavejs/zwave-js-ui
+    image: zwavejs/zwave-js-ui:11.15.1
     restart: unless-stopped
     depends_on:
       - mqtt
@@ -107,7 +107,7 @@ services:
 # Domoticz Server
   domoticz:
     container_name: domoticz
-    image: domoticz/domoticz
+    image: domoticz/domoticz:2026.4
     restart: unless-stopped
     privileged: true
     environment:
@@ -135,7 +135,7 @@ services:
 # Homebride Server
   homebridge:
     container_name: homebridge
-    image: homebridge/homebridge
+    image: homebridge/homebridge:2025-09-28
     restart: unless-stopped
     environment:
       - TZ=${TZ}
