@@ -22,10 +22,11 @@ cp -v /opt/domoticz/userdata/config/templates/* /opt/domoticz/www/templates/
 ## Step3: End
 
 ## Step4: Installing MachineOn theme
-if [ ! -d "/opt/domoticz/www/styles/machinon" ]; then
+if [ ! -d "/opt/domoticz/www/styles/machinon/.git" ]; then
     git clone -b dist --single-branch https://github.com/domoticz/Machinon.git /opt/domoticz/www/styles/machinon
-else
-    echo "MachineOn theme already installed."
+else if [ -d "/opt/domoticz/www/styles/machinon/.git" ]; then
+    cd /opt/domoticz/www/styles/machinon && git pull --ff-only
+    echo "MachineOn theme already installed. Updating..."
 fi
 ## Step4: End
 
