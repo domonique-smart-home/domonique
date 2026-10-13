@@ -35,7 +35,7 @@ services:
   ups:
     container_name: nut-upsd
     image: botsudo/nut-upsd:latest
-    restart: unless-stopped
+    restart: no
     environment:
       - TZ=${TZ}
       - UPS_DRIVER=${UPS_DRIVER}
