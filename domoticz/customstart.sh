@@ -31,3 +31,4 @@ fi
 ## Step4: End
 
 sed -i "s|<button class=\"btn\">.*</button>|<button class=\"btn\">$cloudid</button>|" "/opt/domoticz/www/templates/domonique cloud.html"
+
