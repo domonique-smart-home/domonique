@@ -23,12 +23,11 @@ cp -v /opt/domoticz/userdata/config/templates/* /opt/domoticz/www/templates/
 
 ## Step4: Installing MachineOn theme
 if [ ! -d "/opt/domoticz/www/styles/machinon/.git" ]; then
-    git clone -b dist --single-branch https://github.com/domoticz/Machinon.git /opt/domoticz/www/styles/machinon
-else if [ -d "/opt/domoticz/www/styles/machinon/.git" ]; then
-    cd /opt/domoticz/www/styles/machinon && git pull --ff-only
-    echo "MachineOn theme already installed. Updating..."
+        git clone -b dist --single-branch https://github.com/domoticz/Machinon.git /opt/domoticz/www/styles/machinon
+else
+        echo "MachineOn theme already installed. Updating..."
+        cd /opt/domoticz/www/styles/machinon && git pull --ff-only
 fi
 ## Step4: End
 
 sed -i "s|<button class=\"btn\">.*</button>|<button class=\"btn\">$cloudid</button>|" "/opt/domoticz/www/templates/domonique cloud.html"
-
