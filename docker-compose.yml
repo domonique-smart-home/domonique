@@ -35,8 +35,6 @@ services:
   ups:
     container_name: nut-upsd
     image: botsudo/nut-upsd:latest
-    profiles:
-      - nut-upsd
     restart: unless-stopped
     environment:
       - TZ=${TZ}
