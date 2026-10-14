@@ -149,10 +149,10 @@ nginx:
       - '81:81'      # Admin Web Port
       # Add any other Stream port you want to expose
       # - '21:21'      # FTP
-      - 8081:8081
-      - 8082:8082
-      - 8083:8083
-      - 8084:8084
+      # - 8081:8081
+      # - 8082:8082
+      # - 8083:8083
+      # - 8084:8084
     environment:
       - TZ="Europe/Madrid"
       # Uncomment this if IPv6 is not enabled on your host
