@@ -1,5 +1,5 @@
 # version: '3.1' (12/10/2026)
-# Services version: MQTT Server(2.0.22), Zigbee2MQTT Server(2.14.2), Domoticz Server(2026.4), Homebride Server(2025-09-28)
+# Services version: MQTT Server(2.0.22), Zigbee2MQTT Server(2.14.2), Z-Wave JS UI Server (11.15.1), Domoticz Server(2026.4), Homebride Server(2025-09-28)
 
 networks:
   default:
@@ -31,6 +31,58 @@ services:
             max-file: 2
             max-size: 10m
 
+# Zigbee2MQTT Server
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    image: koenkk/zigbee2mqtt:2.14.2
+    restart: unless-stopped
+    depends_on:
+      - mqtt
+    environment:
+      - TZ=${TZ}    
+    devices:
+      - ${ZIGBEE_DEVICE}:/dev/ttyACM0
+    volumes:
+      - /${ROOT_FOLDER}/zigbee2mqtt:/app/data
+      - /run/udev:/run/udev:ro
+    networks:
+      - default
+    #ports:
+    # - 8081:8080     # Publish Port when no using proxy
+    logging:
+        driver: "json-file"
+        options:
+            max-file: 2
+            max-size: 10m
+
+# Z-Wave JS UI Server
+  zwave-js-ui:
+    container_name: zwave-js-ui
+    image: zwavejs/zwave-js-ui:11.15.1
+    restart: unless-stopped
+    depends_on:
+      - mqtt
+    tty: true
+    stop_signal: SIGINT
+    environment:
+      - SESSION_SECRET=${ZWAVE_SESSION_SECRET}
+      - ZWAVEJS_EXTERNAL_CONFIG=/usr/src/app/store/.config-db
+      - TZ=${TZ}
+    devices:
+      - ${ZWAVE_DEVICE}:/dev/zwave
+    volumes:
+      - ${ROOT_FOLDER}/zwave-js-ui:/usr/src/app/store
+    networks:
+      - default
+    ports:
+      #- '8082:8091'     # Publish Port when no using proxy
+      - '3000:3000'
+    logging:
+        driver: "json-file"
+        options:
+            max-file: 2
+            max-size: 10m
+
 # NUT Network UPS Tool Daemon
   ups:
     container_name: nut-upsd
@@ -53,30 +105,6 @@ services:
             max-file: 2
             max-size: 10
 
-# Zigbee2MQTT Server
-  zigbee2mqtt:
-    container_name: zigbee2mqtt
-    image: koenkk/zigbee2mqtt:2.14.2
-    restart: unless-stopped
-    depends_on:
-      - mqtt
-    environment:
-      - TZ=${TZ}    
-    devices:
-      - ${ZIGBEE_DEVICE}:/dev/ttyACM0
-    volumes:
-      - /${ROOT_FOLDER}/zigbee2mqtt:/app/data
-      - /run/udev:/run/udev:ro
-    networks:
-      - default
-    ports:
-      - 8081:8080
-    logging:
-        driver: "json-file"
-        options:
-            max-file: 2
-            max-size: 10m
-
 # Domoticz Server
   domoticz:
     container_name: domoticz
@@ -86,7 +114,8 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=${TZ}
-      - WWW_PORT=80
+      - WWW_PORT=0
+      - SSL_PORT=443
     devices:
       - ${DOMOTICZ_ACM0_DEVICE}:/dev/ttyACM0
       - ${DOMOTICZ_ACM1_DEVICE}:/dev/ttyACM1
@@ -101,6 +130,11 @@ services:
       - 443:443
       - 6144:6144
       - 1443:1443
+    logging:
+      driver: "json-file"
+      options:
+        max-file: 2
+        max-size: 10m
 
 # Homebride Server
   homebridge:
@@ -114,6 +148,8 @@ services:
     volumes:
       - ${ROOT_FOLDER}/homebridge:/homebridge
     network_mode: host
+    ports:
+      - 8581:8581     # Publish Port when no using proxy
     logging:
       driver: "json-file"
       options:
@@ -132,34 +168,40 @@ services:
       # Path to alexa_remote_control.sh file that will be updated with REFRESH_TOKEN
       - ${ROOT_FOLDER}/domoticz/scripts/bash/alexa_remote_control.sh:/data/alexa_remote_control.sh
     ports:
-      - 8888:8888
+      - 8888:8888     # Publish Port when no using proxy
+    logging:
+      driver: "json-file"
+      options:
+        max-file: 2
+        max-size: 10m
 
 # Reverse Proxy
-nginx:
-    image: 'jc21/nginx-proxy-manager:2.13.5'
-    container_name: rproxy
-    restart: unless-stopped
-    networks:
-      - default   
-    # Optional: If not plubishing ports throught other service
-    ports:
-      # These ports are in format <host-port>:<container-port>
-      # - '80:80'      # Public HTTP Port
-      # - '443:443'    # Public HTTPS Port
-      - '81:81'      # Admin Web Port
-      # Add any other Stream port you want to expose
-      # - '21:21'      # FTP
-      # - 8081:8081
-      # - 8082:8082
-      # - 8083:8083
-      # - 8084:8084
-    environment:
-      - TZ="Europe/Madrid"
-      # Uncomment this if IPv6 is not enabled on your host
-      - DISABLE_IPV6="true"
-      # Uncomment this if you want to change the location of
-      # the SQLite DB file within the container
-      # DB_SQLITE_FILE: "/data/database.sqlite"
-    volumes:
-      - ${ROOT_FOLDER}/nginx/data:/data
-      - ${ROOT_FOLDER}/nginx/letsencrypt:/etc/letsencrypt
+  nginx:
+      image: 'jc21/nginx-proxy-manager:2.13.5'
+      container_name: reverse-proxy
+      restart: unless-stopped
+      extra_hosts:
+      - "host.docker.internal:host-gateway"
+      # Optional: If not plubishing ports throught other service
+      ports:
+        # These ports are in format <host-port>:<container-port>
+        # - '80:80'      # Public HTTP Port
+        # - '443:443'    # Public HTTPS Port
+        # - '81:81'      # Admin Web Port
+        # Add any other Stream port you want to expose
+        # - '21:21'      # FTP
+        - 8081-8084:8081-8084
+      environment:
+        - TZ="Europe/Madrid"
+        # Uncomment this if IPv6 is not enabled on your host
+        - DISABLE_IPV6="true"
+      volumes:
+        - ${ROOT_FOLDER}/nginx/data:/data
+        - ${ROOT_FOLDER}/nginx/letsencrypt:/etc/letsencrypt
+      networks:
+        - default
+      logging:
+        driver: "json-file"
+        options:
+          max-file: 2
+          max-size: 10m
