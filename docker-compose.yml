@@ -133,3 +133,33 @@ services:
       - ${ROOT_FOLDER}/domoticz/scripts/bash/alexa_remote_control.sh:/data/alexa_remote_control.sh
     ports:
       - 8888:8888
+
+# Reverse Proxy
+nginx:
+    image: 'jc21/nginx-proxy-manager:2.13.5'
+    container_name: rproxy
+    restart: unless-stopped
+    networks:
+      - default   
+    # Optional: If not plubishing ports throught other service
+    ports:
+      # These ports are in format <host-port>:<container-port>
+      # - '80:80'      # Public HTTP Port
+      # - '443:443'    # Public HTTPS Port
+      - '81:81'      # Admin Web Port
+      # Add any other Stream port you want to expose
+      # - '21:21'      # FTP
+      - 8081:8081
+      - 8082:8082
+      - 8083:8083
+      - 8084:8084
+    environment:
+      - TZ="Europe/Madrid"
+      # Uncomment this if IPv6 is not enabled on your host
+      - DISABLE_IPV6="true"
+      # Uncomment this if you want to change the location of
+      # the SQLite DB file within the container
+      # DB_SQLITE_FILE: "/data/database.sqlite"
+    volumes:
+      - ${ROOT_FOLDER}/nginx/data:/data
+      - ${ROOT_FOLDER}/nginx/letsencrypt:/etc/letsencrypt
