@@ -1,4 +1,7 @@
 #!/bin/bash
+export DEBIAN_FRONTEND=noninteractive
+export DEBCONF_NONINTERACTIVE_SEEN=true
+
 ## Step1: Generate Serial if not exist
 if [ ! -f /opt/domoticz/userdata/config/.domoniqueserial ]
         then
