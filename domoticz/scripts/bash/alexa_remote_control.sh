@@ -107,7 +107,7 @@ encryptionKey="$SCRIPTPATH/lib/credentialsKey.pem"
 
 # this can be obtained by doing the device registration login flow
 #  e.g. from here: https://github.com/Apollon77/alexa-cookie/
-#SET_REFRESH_TOKEN='Atnr|EwICINxUYBWbFFyQumiPxlHQjTrTEnYFC6sqHPvSe...'
+SET_REFRESH_TOKEN='Atnr|EwICINxUYBWbFFyQumiPxlHQjTrTEnYFC6sqHPvSe...'
 
 SET_LANGUAGE='es,es-ES;q=0.7,en;q=0.3'
 #SET_LANGUAGE='en-US'
