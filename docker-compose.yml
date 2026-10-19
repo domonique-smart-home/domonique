@@ -69,7 +69,7 @@ services:
       - ZWAVEJS_EXTERNAL_CONFIG=/usr/src/app/store/.config-db
       - TZ=${TZ}
     devices:
-      - ${ZWAVE_DEVICE}:/dev/ttyACM0
+      - ${ZWAVE_DEVICE}:/dev/zwave
     volumes:
       - ${ROOT_FOLDER}/zwave-js-ui:/usr/src/app/store
     networks:
