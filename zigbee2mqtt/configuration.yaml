@@ -48,3 +48,12 @@ frontend:
   # ssl_cert: /config/etc/letsencrypt/live/mydomain.com/fullchain.pem
   # Optional, private key file path for exposing HTTPS. The sibling property 'ssl_cert' must be set for HTTPS to be activated
   # ssl_key: /config/etc/letsencrypt/live/mydomain.com/privkey.pem
+
+# Specific configuration for devices
+# Frient KEPZB-110/Develco KEYZB-110
+#  '0x0000000000000000':
+#    friendly_name: Security Keypad
+#    description: 'Security Keypad'
+#    homeassistant:
+#      action_code:
+#        unit_of_measurement: text
